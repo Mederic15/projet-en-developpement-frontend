@@ -2,7 +2,7 @@ function PageAccueil() {
     return (
       <div className="card text-center mx-auto" style={{ width: "50rem" }}>
         <img
-          src={require("../../images/montmorency-area.png")}
+          src={require("./images/montmorency-area.png")}
           className="card-img-top"
           alt="Campus de montmorency"
         />

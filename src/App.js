@@ -1,14 +1,24 @@
-import logo from './logo.svg';
-import FooterBar from "./components/bars/FooterBar";
+import React, { useState, useCallback } from 'react';
+import { BrowserRouter as Router, Routes, Route, Redirect, Switch } from 'react-router-dom';
 import './App.css';
-import PageAccueil from "./components/pages/Accueil";
+import PageAccueil from './Accueil';
+import FormulaireCreationCompte from './creer-compte/CreerCompte';
+import MainNavigation from './shared/components/Navigation/MainNavigation';
+import Connexion from './connexion/connexion';
 
 function App() {
   return (
     <div className="App">
-      <PageAccueil/>
-
-      <FooterBar />
+      <Router>
+        <MainNavigation />
+        <main>
+          <Routes>
+            <Route path="/" element={<PageAccueil />} />
+            <Route path="/creer-compte" element={<FormulaireCreationCompte />} />
+            <Route path="/connexion" element={<Connexion />} />
+          </Routes>
+        </main>
+      </Router>
     </div>
   );
 }
