@@ -5,6 +5,7 @@ import PageAccueil from './Accueil';
 import FormulaireCreationCompte from './creer-compte/CreerCompte';
 import MainNavigation from './shared/components/Navigation/MainNavigation';
 import Connexion from './connexion/connexion';
+import NewStage from './stage/pages/NewStage'
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
             <Route path="/" element={<PageAccueil />} />
             <Route path="/creer-compte" element={<FormulaireCreationCompte />} />
             <Route path="/connexion" element={<Connexion />} />
+            <Route path="/stage" element={<NewStage />} />
           </Routes>
         </main>
       </Router>

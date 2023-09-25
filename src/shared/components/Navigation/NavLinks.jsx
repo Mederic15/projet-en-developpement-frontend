@@ -20,6 +20,9 @@ const NavLinks = props => {
       <li>
         <NavLink to="/connexion">Se connecter</NavLink>
       </li>
+      <li>
+        <NavLink to="stage">Stage</NavLink>
+      </li>
     </ul>
   );
 };
