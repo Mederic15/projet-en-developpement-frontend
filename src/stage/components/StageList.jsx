@@ -10,10 +10,10 @@ const StageList = props => {
   let filteredStages = props.stages;
 
   useEffect(() => {
-    fetch('https://projetstages.onrender.com/api/Stage')
+    fetch('https://development-project-0105-api-zdnf.onrender.com/internships/')
       .then(response => response.json())
       .then(data => {
-        setStages(data.stages);
+        setStages(data.internships);
       })
       .catch(error => console.error(error));
   }, []);
@@ -21,6 +21,8 @@ const StageList = props => {
   filteredStages = props.selectedStageType === "Tous"
   ? stages
   : stages.filter(stage => stage.type === props.selectedStageType);
+
+  console.log(stages);
 
   if (stages.length === 0) {
     return (
@@ -39,12 +41,12 @@ const StageList = props => {
         <StageItem
           key={stage.id}
           id={stage.id}
-          nomContact={stage.nomContact}
-          courrielContact={stage.courrielContact}
-          entreprise={stage.entreprise}
-          type={stage.type}
-          nbPostesDisponible={stage.nbPostesDisponible}
+          title={stage.title}
           description={stage.description}
+          salary={stage.salary}
+          address={stage.address}
+          startingDate={stage.startingDate}
+          endingDate={stage.endingDate}
         />
       ))}
     </ul>

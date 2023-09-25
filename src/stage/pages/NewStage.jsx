@@ -33,7 +33,7 @@ const NewStage = () => {
   };
 
   useEffect(() => {
-    fetch('https://projetstages.onrender.com/api/Stage')
+    fetch('https://development-project-0105-api-zdnf.onrender.com/internships/')
       .then(response => response.json())
       .then(data => {
         setStages(data.stages);
@@ -50,35 +50,27 @@ const NewStage = () => {
   };
   const [formState, inputHandler] = useForm(
     {
-      nomcontact: {
-        value: "",
-        isValid: false,
-      },
-      courrielContact: {
-        value: "",
-        isValid: false,
-      },
-      telephoneContact: {
-        value: "",
-        isValid: false,
-      },
-      entreprise: {
-        value: "",
-        isValid: false,
-      },
-      adresse: {
-        value: "",
-        isValid: false,
-      },
-      type: {
-        value: "",
-        isValid: false,
-      },
-      nombrePostes: {
+      title: {
         value: "",
         isValid: false,
       },
       description: {
+        value: "",
+        isValid: false,
+      },
+      salary: {
+        value: "",
+        isValid: false,
+      },
+      address: {
+        value: "",
+        isValid: false,
+      },
+      startingDate: {
+        value: "",
+        isValid: false,
+      },
+      endingDate: {
         value: "",
         isValid: false,
       },
@@ -93,15 +85,13 @@ const NewStage = () => {
     setFormVisible(false);
 
     const dataToSend = JSON.stringify({
-      nomContact: formState.inputs.nomContact.value,
-      courrielContact: formState.inputs.courrielContact.value,
-      telephoneContact: formState.inputs.telephoneContact.value,
-      entreprise: formState.inputs.entreprise.value,
-      adresse: formState.inputs.adresse.value,
-      type: formState.inputs.type.value,
-      nbPostesDisponible: formState.inputs.nombrePostes.value,
+      title: formState.inputs.title.value,
       description: formState.inputs.description.value,
-      remuneration: formState.inputs.remuneration.value
+      salary: formState.inputs.salary.value,
+      address: formState.inputs.address.value,
+      startingDate: formState.inputs.startingDate.value,
+      endingDate: formState.inputs.endingDate.value,
+      employerId: "6511ef9299867bb2d4bc921d"
     });
 
     console.log(dataToSend);
@@ -109,7 +99,7 @@ const NewStage = () => {
 
     try {
       const reponseData = await sendRequest(
-        'https://projetstages.onrender.com/api/Stage',
+        'https://development-project-0105-api-zdnf.onrender.com/internships/',
         "POST",
         dataToSend,
         {
@@ -140,86 +130,62 @@ const NewStage = () => {
 
       {isFormVisible && (
             <form className="stage-form" onSubmit={stageSubmitHandler}>
-              <Input
-                id="nomContact"
-                element="input"
-                type="text"
-                label="Nom personne contact"
-                validators={[VALIDATOR_REQUIRE()]}
-                errorText="Entrez un nom valide."
-                onInput={inputHandler}
-              />
-              <Input
-                id="courrielContact"
-                element="input"
-                type="email"
-                label="Courriel personne contact"
-                validators={[VALIDATOR_REQUIRE(), VALIDATOR_EMAIL()]}
-                errorText="Entrez un courriel valide."
-                onInput={inputHandler}
-              />
-              <Input
-                id="telephoneContact"
-                element="input"
-                type="tel"
-                label="Numéro de téléphone de la personne contact"
-                validators={[VALIDATOR_REQUIRE(), VALIDATOR_PHONE()]}
-                errorText="Entrez un numéro de téléphone valide."
-                onInput={inputHandler}
-              />
-              <Input
-                id="entreprise"
-                element="input"
-                type="text"
-                label="Nom de l'entreprise"
-                validators={[VALIDATOR_REQUIRE()]}
-                errorText="Entrez un nom valide."
-                onInput={inputHandler}
-              />
-              <Input
-                id="adresse"
-                element="input"
-                type="text"
-                label="Adresse de l’entreprise"
-                validators={[VALIDATOR_REQUIRE()]}
-                errorText="Entrez une adresse valide."
-                onInput={inputHandler}
-              />
-              <Select
-                id="type"
-                label="Type de stage"
-                validators={[VALIDATOR_REQUIRE()]}
-                errorText="Veuillez sélectionner le type de stage."
-                onInput={inputHandler}
-              />
-              <Input
-                id="nombrePostes"
-                element="input"
-                type="number"
-                label="Nombre de postes disponibles"
-                validators={[VALIDATOR_REQUIRE(), VALIDATOR_NUMBER()]}
-                errorText="Entrez un nombre valide."
-                onInput={inputHandler}
-              />
-              <Input
-                id="description"
-                element="textarea"
-                label="Description du stage"
-                validators={[VALIDATOR_MINLENGTH(5)]}
-                errorText="Entrez une description valide (au moins 5 caractères)."
-                onInput={inputHandler}
-              />
-              <Input
-                id="remuneration"
-                element="input"
-                type="text"
-                label="Rémunération"
-                validators={[VALIDATOR_REQUIRE()]}
-                errorText="Entrez une rémunération valide."
-                onInput={inputHandler}
-              />
-              <Button type="submit">Ajouter stage</Button>
-            </form>
+            <Input
+              id="title"
+              element="input"
+              type="text"
+              label="Titre du stage"
+              validators={[VALIDATOR_REQUIRE()]}
+              errorText="Entrez un titre valide."
+              onInput={inputHandler}
+            />
+            <Input
+              id="description"
+              element="input"
+              type="email"
+              label="Description"
+              validators={[VALIDATOR_REQUIRE(), VALIDATOR_EMAIL()]}
+              errorText="Entrez un courriel valide."
+              onInput={inputHandler}
+            />
+            <Input
+              id="salary"
+              element="input"
+              type="tel"
+              label="Salaire"
+              validators={[VALIDATOR_REQUIRE(), VALIDATOR_PHONE()]}
+              errorText="Entrez un numéro de téléphone valide."
+              onInput={inputHandler}
+            />
+            <Input
+              id="address"
+              element="input"
+              type="text"
+              label="Adresse de l'entreprise"
+              validators={[VALIDATOR_REQUIRE()]}
+              errorText="Entrez un nom valide."
+              onInput={inputHandler}
+            />
+            <Input
+              id="startingDate"
+              element="input"
+              type="date"
+              label="Date de début"
+              validators={[VALIDATOR_REQUIRE()]}
+              errorText="Entrez une adresse valide."
+              onInput={inputHandler}
+            />
+            <Input
+              id="endingDate"
+              element="input"
+              type="date"
+              label="Date de fin"
+              validators={[VALIDATOR_REQUIRE()]}
+              errorText="Entrez une date valide."
+              onInput={inputHandler}
+            />
+            <Button type="submit">Ajouter stage</Button>
+          </form>
       )}
             <StageList selectedStageType={selectedStageType}/>
     </React.Fragment>
