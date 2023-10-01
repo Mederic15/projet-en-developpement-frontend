@@ -36,7 +36,7 @@ const NewStage = () => {
     fetch('https://development-project-0105-api-zdnf.onrender.com/internships/')
       .then(response => response.json())
       .then(data => {
-        setStages(data.stages);
+        setStages(data.internships);
       })
       .catch(error => console.error(error));
   }, []);
@@ -120,13 +120,6 @@ const NewStage = () => {
       <Button onClick={toggleFormVisibility}>
         {isFormVisible ? "Masquer le formulaire" : "Afficher le formulaire"}
       </Button>
-
-      <Select
-        id="stageType"
-        label="Type de stage à afficher"
-        onInput={handleStageTypeChange}
-        value={selectedStageType}
-      />
 
       {isFormVisible && (
             <form className="stage-form" onSubmit={stageSubmitHandler}>
