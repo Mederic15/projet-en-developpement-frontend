@@ -13,6 +13,8 @@ const StageItem = props => {
       <h2>{props.startingDate}</h2>
       <h2>{props.endingDate}</h2>
       <h3>{props.description}</h3>
+      <button onClick={props.onClickDeleteFunction}>Supprimer</button>
+      <button onClick={props.onClickModifyFunction}>Modifier</button>
       </div>
     </React.Fragment>
   );

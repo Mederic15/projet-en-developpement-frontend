@@ -1,26 +1,27 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from "react";
 
-import Card from '../../shared/components/UIElements/Card';
-import StageItem from './StageItem';
-import Button from '../../shared/components/FormElements/Button';
-import './StageList.css';
+import Card from "../../shared/components/UIElements/Card";
+import StageItem from "./StageItem";
+import Button from "../../shared/components/FormElements/Button";
+import "./StageList.css";
 
-const StageList = props => {
+const StageList = (props) => {
   const [stages, setStages] = useState([]);
   let filteredStages = props.stages;
 
   useEffect(() => {
-    fetch('https://development-project-0105-api-zdnf.onrender.com/internships/')
-      .then(response => response.json())
-      .then(data => {
+    fetch("https://development-project-0105-api-zdnf.onrender.com/internships/")
+      .then((response) => response.json())
+      .then((data) => {
         setStages(data.internships);
       })
-      .catch(error => console.error(error));
+      .catch((error) => console.error(error));
   }, []);
 
-  filteredStages = props.selectedStageType === "Tous"
-  ? stages
-  : stages.filter(stage => stage.type === props.selectedStageType);
+  filteredStages =
+    props.selectedStageType === "Tous"
+      ? stages
+      : stages.filter((stage) => stage.type === props.selectedStageType);
 
   console.log(stages);
 
@@ -37,7 +38,7 @@ const StageList = props => {
 
   return (
     <ul className="stage-list">
-      {filteredStages.map(stage => (
+      {filteredStages.map((stage) => (
         <StageItem
           key={stage.id}
           id={stage.id}
@@ -47,6 +48,21 @@ const StageList = props => {
           address={stage.address}
           startingDate={stage.startingDate}
           endingDate={stage.endingDate}
+          onClickDeleteFunction={() => {
+            try {
+              console.log("stage.id" + stage.id);
+              fetch(
+                "https://development-project-0105-api-zdnf.onrender.com/internships/" +
+                  stage.id,
+                {
+                  method: "DELETE",
+                }
+              );
+            } catch (err) {
+              console.log(err);
+            }
+          }}
+          onClickModifyFunction={() => {}}
         />
       ))}
     </ul>
