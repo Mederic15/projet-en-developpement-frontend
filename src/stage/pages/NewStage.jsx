@@ -142,18 +142,18 @@ const NewStage = () => {
             <Input
               id="description"
               element="input"
-              type="email"
+              type="text"
               label="Description"
-              validators={[VALIDATOR_REQUIRE(), VALIDATOR_EMAIL()]}
+              validators={[VALIDATOR_REQUIRE()]}
               errorText="Entrez un courriel valide."
               onInput={inputHandler}
             />
             <Input
               id="salary"
               element="input"
-              type="tel"
+              type="text"
               label="Salaire"
-              validators={[VALIDATOR_REQUIRE(), VALIDATOR_PHONE()]}
+              validators={[VALIDATOR_REQUIRE()]}
               errorText="Entrez un numéro de téléphone valide."
               onInput={inputHandler}
             />
