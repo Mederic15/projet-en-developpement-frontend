@@ -67,8 +67,8 @@ const StageList = (props) => {
               descriptionStage = prompt("Nouvelle description"),
               salaire = prompt("Nouveau salaire"),
               adresse = prompt("Nouvelle adresse"),
-              dateDebut = prompt("Nouvelle date de début (AAAA/MM/DD)"),
-              dateFin = prompt("Nouvelle date de fin (AAAA/MM/DD)");
+              dateDebut = prompt("Nouvelle date de début (AAAA/MM/JJ)"),
+              dateFin = prompt("Nouvelle date de fin (AAAA/MM/JJ)");
 
             fetch(
               "https://development-project-0105-api-zdnf.onrender.com/internships/" + stage.id,
