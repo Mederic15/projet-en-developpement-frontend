@@ -29,7 +29,7 @@ const StageList = (props) => {
     return (
       <div className="stage-list center">
         <Card>
-          <h2>No stage found. Maybe create one?</h2>
+          <h2>Aucun stage trouvé. Voulez-vous en créer un ?</h2>
           <Button to="/stages/new">Share stage</Button>
         </Card>
       </div>
