@@ -134,7 +134,7 @@ const NewStage = () => {
               type="text"
               label="Description"
               validators={[VALIDATOR_REQUIRE()]}
-              errorText="Entrez un courriel valide."
+              errorText="Entrez une description valide."
               onInput={inputHandler}
             />
             <Input
@@ -143,7 +143,7 @@ const NewStage = () => {
               type="text"
               label="Salaire"
               validators={[VALIDATOR_REQUIRE()]}
-              errorText="Entrez un numéro de téléphone valide."
+              errorText="Entrez un salaire valide."
               onInput={inputHandler}
             />
             <Input
@@ -152,7 +152,7 @@ const NewStage = () => {
               type="text"
               label="Adresse de l'entreprise"
               validators={[VALIDATOR_REQUIRE()]}
-              errorText="Entrez un nom valide."
+              errorText="Entrez une adresse valide."
               onInput={inputHandler}
             />
             <Input
@@ -161,7 +161,7 @@ const NewStage = () => {
               type="date"
               label="Date de début"
               validators={[VALIDATOR_REQUIRE()]}
-              errorText="Entrez une adresse valide."
+              errorText="Entrez une date valide."
               onInput={inputHandler}
             />
             <Input
