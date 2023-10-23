@@ -107,7 +107,7 @@ const NewStage = () => {
     });
 
     try {
-      const reponseData = await sendRequest(
+      await sendRequest(
         'https://development-project-0105-api-zdnf.onrender.com/internships/',
         "POST",
         dataToSend,
@@ -116,7 +116,9 @@ const NewStage = () => {
         }
       );
 
-      history.push("/");
+      // Rafraîchir la page actuelle
+      window.location.reload();
+
     } catch (err) {
       console.log(err);
     }
