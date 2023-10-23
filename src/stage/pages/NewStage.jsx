@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect } from "react";
-import { useNavigate  } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import StageList from "../components/StageList";
 import Input from "../../shared/components/FormElements/Input";
 import Button from "../../shared/components/FormElements/Button";
@@ -23,6 +23,7 @@ const NewStage = () => {
   const [isFormVisible, setFormVisible] = useState(false);
   const [stages, setStages] = useState([]);
   const [selectedStageType, setSelectedStageType] = useState("Tous");
+  const history = useNavigate();
 
   const handleStageTypeChange = (id, value, isValid) => {
     if (isValid) {
@@ -41,13 +42,10 @@ const NewStage = () => {
       .catch(error => console.error(error));
   }, []);
 
-  const filteredStages = selectedStageType === "Tous"
-  ? stages
-  : stages.filter(stage => stage.type === selectedStageType);
-
   const toggleFormVisibility = () => {
     setFormVisible((prevIsFormVisible) => !prevIsFormVisible);
   };
+
   const [formState, inputHandler] = useForm(
     {
       title: {
@@ -78,7 +76,21 @@ const NewStage = () => {
     false
   );
 
-  const history = useNavigate ();
+  const checkFormValidity = () => {
+    for (const inputName in formState.inputs) {
+      if (!formState.inputs[inputName].isValid) {
+        setIsFormValid(false);
+        return;
+      }
+    }
+    setIsFormValid(true);
+  };
+
+  useEffect(() => {
+    checkFormValidity();
+  }, [formState]);
+
+  const [isFormValid, setIsFormValid] = useState(false);
 
   const stageSubmitHandler = async (event) => {
     event.preventDefault();
@@ -94,9 +106,6 @@ const NewStage = () => {
       employerId: "6511ef9299867bb2d4bc921d"
     });
 
-    console.log(dataToSend);
-
-
     try {
       const reponseData = await sendRequest(
         'https://development-project-0105-api-zdnf.onrender.com/internships/',
@@ -107,7 +116,6 @@ const NewStage = () => {
         }
       );
 
-      console.log(reponseData);
       history.push("/");
     } catch (err) {
       console.log(err);
@@ -122,65 +130,67 @@ const NewStage = () => {
       </Button>
 
       {isFormVisible && (
-            <form className="stage-form" onSubmit={stageSubmitHandler}>
-            <Input
-              id="title"
-              element="input"
-              type="text"
-              label="Titre du stage"
-              validators={[VALIDATOR_REQUIRE()]}
-              errorText="Entrez un titre valide."
-              onInput={inputHandler}
-            />
-            <Input
-              id="description"
-              element="input"
-              type="text"
-              label="Description"
-              validators={[VALIDATOR_REQUIRE()]}
-              errorText="Entrez un courriel valide."
-              onInput={inputHandler}
-            />
-            <Input
-              id="salary"
-              element="input"
-              type="text"
-              label="Salaire"
-              validators={[VALIDATOR_REQUIRE()]}
-              errorText="Entrez un numéro de téléphone valide."
-              onInput={inputHandler}
-            />
-            <Input
-              id="address"
-              element="input"
-              type="text"
-              label="Adresse de l'entreprise"
-              validators={[VALIDATOR_REQUIRE()]}
-              errorText="Entrez un nom valide."
-              onInput={inputHandler}
-            />
-            <Input
-              id="startingDate"
-              element="input"
-              type="date"
-              label="Date de début"
-              validators={[VALIDATOR_REQUIRE()]}
-              errorText="Entrez une adresse valide."
-              onInput={inputHandler}
-            />
-            <Input
-              id="endingDate"
-              element="input"
-              type="date"
-              label="Date de fin"
-              validators={[VALIDATOR_REQUIRE()]}
-              errorText="Entrez une date valide."
-              onInput={inputHandler}
-            />
+        <form className="stage-form" onSubmit={stageSubmitHandler}>
+          <Input
+            id="title"
+            element="input"
+            type="text"
+            label="Titre du stage"
+            validators={[VALIDATOR_REQUIRE()]}
+            errorText="Entrez un titre valide."
+            onInput={inputHandler}
+          />
+          <Input
+            id="description"
+            element="input"
+            type="text"
+            label="Description"
+            validators={[VALIDATOR_REQUIRE()]}
+            errorText="Entrez un courriel valide."
+            onInput={inputHandler}
+          />
+          <Input
+            id="salary"
+            element="input"
+            type="text"
+            label="Salaire"
+            validators={[VALIDATOR_REQUIRE()]}
+            errorText="Entrez un numéro de téléphone valide."
+            onInput={inputHandler}
+          />
+          <Input
+            id="address"
+            element="input"
+            type="text"
+            label="Adresse de l'entreprise"
+            validators={[VALIDATOR_REQUIRE()]}
+            errorText="Entrez un nom valide."
+            onInput={inputHandler}
+          />
+          <Input
+            id="startingDate"
+            element="input"
+            type="date"
+            label="Date de début"
+            validators={[VALIDATOR_REQUIRE()]}
+            errorText="Entrez une adresse valide."
+            onInput={inputHandler}
+          />
+          <Input
+            id="endingDate"
+            element="input"
+            type="date"
+            label="Date de fin"
+            validators={[VALIDATOR_REQUIRE()]}
+            errorText="Entrez une date valide."
+            onInput={inputHandler}
+          />
+          {isFormValid && (
             <Button type="submit">Ajouter stage</Button>
-          </form>
+          )}
+        </form>
       )}
-            <StageList selectedStageType={selectedStageType}/>
+      <StageList selectedStageType={selectedStageType} />
     </React.Fragment>
   );
 };

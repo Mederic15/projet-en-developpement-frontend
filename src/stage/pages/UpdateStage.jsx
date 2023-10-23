@@ -1,130 +1,200 @@
-import React, { useEffect, useState, useContext } from 'react';
-import { useParams, useHistory } from 'react-router-dom';
-
-import Input from '../../shared/components/FormElements/Input';
-import Button from '../../shared/components/FormElements/Button';
-import Card from '../../shared/components/UIElements/Card';
-import ErrorModal from '../../shared/components/UIElements/ErrorModal';
+import React, { useState, useContext, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import StageList from "../components/StageList";
+import Input from "../../shared/components/FormElements/Input";
+import Button from "../../shared.components/FormElements/Button";
+import Select from "../../shared/components/FormElements/Select";
+import ErrorModal from "../../shared/components/UIElements/ErrorModal";
 import {
   VALIDATOR_REQUIRE,
-  VALIDATOR_MINLENGTH
-} from '../../shared/util/validators';
-import { useForm } from '../../shared/hooks/form-hook';
-import { useHttpClient } from '../../shared/hooks/http-hook';
-import { AuthContext } from '../../shared/context/auth-context';
-import './PlaceForm.css';
+  VALIDATOR_MINLENGTH,
+  VALIDATOR_EMAIL,
+  VALIDATOR_PHONE,
+  VALIDATOR_NUMBER,
+} from "../../shared/util/validators";
+import { useForm } from "../../shared/hooks/form-hook";
+import { useHttpClient } from "../../shared/hooks/http-hook";
+import { AuthContext } from "../../shared/context/auth-context";
+import "./StageForm.css";
 
-const UpdateStage = () => {
+const NewStage = () => {
   const auth = useContext(AuthContext);
-  const {error, sendRequest, clearError } = useHttpClient();
-  const [loadedStage, setLoadedStage] = useState();
-  const stageId = useParams().placeId;
-  const history = useHistory();
+  const { error, sendRequest, clearError } = useHttpClient();
+  const [isFormVisible, setFormVisible] = useState(false);
+  const [stages, setStages] = useState([]);
+  const [selectedStageType, setSelectedStageType] = useState("Tous");
+  const history = useNavigate();
 
-  const [formState, inputHandler, setFormData] = useForm(
+  const handleStageTypeChange = (id, value, isValid) => {
+    if (isValid) {
+      setSelectedStageType(value);
+    } else {
+      setSelectedStageType("Tous");
+    }
+  };
+
+  useEffect(() => {
+    fetch('https://development-project-0105-api-zdnf.onrender.com/internships/')
+      .then(response => response.json())
+      .then(data => {
+        setStages(data.internships);
+      })
+      .catch(error => console.error(error));
+  }, []);
+
+  const toggleFormVisibility = () => {
+    setFormVisible((prevIsFormVisible) => !prevIsFormVisible);
+  };
+
+  const [formState, inputHandler] = useForm(
     {
       title: {
-        value: '',
-        isValid: false
+        value: "",
+        isValid: false,
       },
       description: {
-        value: '',
-        isValid: false
-      }
+        value: "",
+        isValid: false,
+      },
+      salary: {
+        value: "",
+        isValid: false,
+      },
+      address: {
+        value: "",
+        isValid: false,
+      },
+      startingDate: {
+        value: "",
+        isValid: false,
+      },
+      endingDate: {
+        value: "",
+        isValid: false,
+      },
     },
     false
   );
 
-  useEffect(() => {
-    const fetchStage = async () => {
-      try {
-        const responseData = await sendRequest(
-          process.env.REACT_APP_BACKEND_URL + `/stages/${stageId}`
-        );
-        setLoadedStage(responseData.stage);
-        console.log(responseData.stage)
-        setFormData(
-          {
-            title: {
-              value: responseData.stage.titre,
-              isValid: true
-            },
-            description: {
-              value: responseData.stage.description,
-              isValid: true
-            }
-          },
-          true
-        );
-
-      } catch (err) {}
-    };
-    fetchStage();
-  }, [sendRequest, stageId, setFormData]);
-
-  const stageUpdateSubmitHandler = async event => {
-    event.preventDefault();
-    try {
-      await sendRequest(
-        process.env.REACT_APP_BACKEND_URL + `/stages/${stageId}`,
-        'PATCH',
-        JSON.stringify({
-          titre: formState.inputs.title.value,
-          description: formState.inputs.description.value
-        }),
-        {
-          'Content-Type': 'application/json'
-        }
-      );
-      history.push('/' + auth.userId + '/stages');
-    } catch (err) {}
+  const checkFormValidity = () => {
+    for (const inputName in formState.inputs) {
+      if (!formState.inputs[inputName].isValid) {
+        setIsFormValid(false);
+        return;
+      }
+    }
+    setIsFormValid(true);
   };
 
+  useEffect(() => {
+    checkFormValidity();
+  }, [formState]);
 
+  const [isFormValid, setIsFormValid] = useState(false);
 
-  if (!loadedStage && !error) {
-    return (
-      <div className="center">
-        <Card>
-          <h2>Could not find place!</h2>
-        </Card>
-      </div>
-    );
-  }
+  const stageSubmitHandler = async (event) => {
+    event.preventDefault();
+    setFormVisible(false);
+
+    const dataToSend = JSON.stringify({
+      title: formState.inputs.title.value,
+      description: formState.inputs.description.value,
+      salary: formState.inputs.salary.value,
+      address: formState.inputs.address.value,
+      startingDate: formState.inputs.startingDate.value,
+      endingDate: formState.inputs.endingDate.value,
+      employerId: "6511ef9299867bb2d4bc921d"
+    });
+
+    try {
+      await sendRequest(
+        'https://development-project-0105-api-zdnf.onrender.com/internships/',
+        "POST",
+        dataToSend,
+        {
+          "Content-Type": "application/json",
+        }
+      );
+
+      // Rafraîchir la page actuelle
+      window.location.reload();
+
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   return (
     <React.Fragment>
       <ErrorModal error={error} onClear={clearError} />
-      {loadedStage && (
-        <form className="stage-form" onSubmit={stageUpdateSubmitHandler}>
+      <Button onClick={toggleFormVisibility}>
+        {isFormVisible ? "Masquer le formulaire" : "Afficher le formulaire"}
+      </Button>
+
+      {isFormVisible && (
+        <form className="stage-form" onSubmit={stageSubmitHandler}>
           <Input
-            id="contact"
+            id="title"
             element="input"
             type="text"
-            label="Title"
+            label="Titre du stage"
             validators={[VALIDATOR_REQUIRE()]}
-            errorText="Please enter a valid title."
+            errorText="Entrez un titre valide."
             onInput={inputHandler}
-            initialValue={loadedStage.titre}
-            initialValid={true}
           />
           <Input
             id="description"
-            element="textarea"
+            element="input"
+            type="text"
             label="Description"
-            validators={[VALIDATOR_MINLENGTH(5)]}
-            errorText="Please enter a valid description (min. 5 characters)."
+            validators={[VALIDATOR_REQUIRE()]}
+            errorText="Entrez un courriel valide."
             onInput={inputHandler}
-            initialValue={loadedStage.description}
-            initialValid={true}
           />
-          <Button type="submit" disabled={!formState.isValid}>
-            Mettre la stage à jour
-          </Button>
+          <Input
+            id="salary"
+            element="input"
+            type="text"
+            label="Salaire"
+            validators={[VALIDATOR_REQUIRE()]}
+            errorText="Entrez un numéro de téléphone valide."
+            onInput={inputHandler}
+          />
+          <Input
+            id="address"
+            element="input"
+            type="text"
+            label="Adresse de l'entreprise"
+            validators={[VALIDATOR_REQUIRE()]}
+            errorText="Entrez un nom valide."
+            onInput={inputHandler}
+          />
+          <Input
+            id="startingDate"
+            element="input"
+            type="date"
+            label="Date de début"
+            validators={[VALIDATOR_REQUIRE()]}
+            errorText="Entrez une adresse valide."
+            onInput={inputHandler}
+          />
+          <Input
+            id="endingDate"
+            element="input"
+            type="date"
+            label="Date de fin"
+            validators={[VALIDATOR_REQUIRE()]}
+            errorText="Entrez une date valide."
+            onInput={inputHandler}
+          />
+          {isFormValid && (
+            <Button type="submit">Ajouter stage</Button>
+          )}
         </form>
       )}
+      <StageList selectedStageType={selectedStageType} />
     </React.Fragment>
   );
 };
 
-export default UpdateStage;
+export default NewStage;

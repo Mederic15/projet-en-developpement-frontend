@@ -62,6 +62,7 @@ const StageList = (props) => {
               console.log(err);
             }
           }}
+          
           onClickModifyFunction={() => {}}
         />
       ))}
