@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
 import Card from "../../shared/components/UIElements/Card";
 import StageItem from "./StageItem";
-import Button from "../../shared/components/FormElements/Button";
+import Button from "../../shared/components/FormElements/Button"; // Assurez-vous que le chemin vers le composant Button est correct
 import "./StageList.css";
 
 const StageList = (props) => {
   const [stages, setStages] = useState([]);
-  let filteredStages = props.stages;
+  let filteredStages = props.stages; // Vous n'utilisez pas encore props.stages ici
 
   const fetchStages = async () => {
     try {
