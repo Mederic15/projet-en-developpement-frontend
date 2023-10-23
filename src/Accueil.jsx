@@ -1,6 +1,20 @@
-function PageAccueil() {
+function PageAccueil(props) {
   return (
     <div className="card text-center mx-auto" style={{ width: "50rem" }}>
+      <h1>
+        {props.utilisateur.message !== "student object" &&
+        props.utilisateur.message !== "employer object"
+          ? "Veillez vous connectez"
+          : props.utilisateur.message === "student object"
+          ? "Bienvenu, " +
+            props.utilisateur.student.firstName +
+            " " +
+            props.utilisateur.student.lastName
+          : "Bienvenu, " +
+            props.utilisateur.employer.firstName +
+            " " +
+            props.utilisateur.employer.lastName}
+      </h1>
       <img
         style={{ height: "150%" }}
         src={require("./images/montmorency-area.png")}

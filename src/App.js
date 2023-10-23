@@ -21,10 +21,13 @@ function App() {
   return (
     <div className="App">
       <Router>
-        <MainNavigation />
+        <MainNavigation utilisateur={utilisateur}/>
         <main>
           <Routes>
-            <Route path="/" element={<PageAccueil />} />
+            <Route
+              path="/"
+              element={<PageAccueil utilisateur={utilisateur} />}
+            />
             <Route
               path="/creer-compte"
               element={<FormulaireCreationCompte utilisateur={utilisateur} />}
@@ -33,7 +36,7 @@ function App() {
               path="/connexion"
               element={<Connexion setUtilisateurFunction={setUtilisateur} />}
             />
-            <Route path="/stage" element={<NewStage />} />
+            <Route path="/stage" element={<NewStage utilisateur={utilisateur}/>} />
           </Routes>
         </main>
       </Router>

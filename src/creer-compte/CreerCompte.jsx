@@ -64,7 +64,10 @@ class FormulaireCreationCompte extends Component {
         }
       )
         .then((response) => response.json())
-        .then((json) => console.log(json));
+        .then((json) => {
+          alert("Le compte a bien été créé!");
+          console.log(json);
+        });
     } else {
       console.log("Type de compte sélectionné :", this.state.typeCompte);
       console.log("Nom :", this.state.nom);
