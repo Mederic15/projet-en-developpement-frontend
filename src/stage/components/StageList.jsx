@@ -62,6 +62,7 @@ const StageList = (props) => {
               console.log(err);
             }
           }}
+          
           onClickModifyFunction={() => {
             let titreStage = prompt("Nouveau titre de stage"),
               descriptionStage = prompt("Nouvelle description"),
