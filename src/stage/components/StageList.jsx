@@ -63,7 +63,38 @@ const StageList = (props) => {
             }
           }}
           
-          onClickModifyFunction={() => {}}
+          onClickModifyFunction={() => {
+            let titreStage = prompt("Nouveau titre de stage"),
+              descriptionStage = prompt("Nouvelle description"),
+              salaire = prompt("Nouveau salaire"),
+              adresse = prompt("Nouvelle adresse"),
+              dateDebut = prompt("Nouvelle date de début (AAAA/MM/JJ)"),
+              dateFin = prompt("Nouvelle date de fin (AAAA/MM/JJ)");
+
+            fetch(
+              "https://development-project-0105-api-zdnf.onrender.com/internships/" + stage.id,
+              {
+                method: "PATCH",
+                body: JSON.stringify({
+                  title: titreStage,
+                  description: descriptionStage,
+                  address: adresse,
+                  salary: salaire,
+                  startingDate: dateDebut,
+                  endingDate: dateFin
+                }),
+                headers: {
+                  "Content-type": "application/json; charset=UTF-8",
+                },
+              }
+            )
+              .then((response) => {
+                console.log(response);
+                alert("le stage a bien été modifié");
+              })
+              .then((json) => console.log(json));
+
+          }}
         />
       ))}
     </ul>

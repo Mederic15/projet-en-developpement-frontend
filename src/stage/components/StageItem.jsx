@@ -8,11 +8,10 @@ const StageItem = props => {
       <div className='stage-item__actions'>
       <h1>{props.title}</h1>
       <h2>{props.description}</h2>
-      <h2>{props.salary}</h2>
+      <h2>{props.salary}$</h2>
       <h2>{props.address}</h2>
       <h2>{props.startingDate}</h2>
       <h2>{props.endingDate}</h2>
-      <h3>{props.description}</h3>
       <button onClick={props.onClickDeleteFunction}>Supprimer</button>
       <button onClick={props.onClickModifyFunction}>Modifier</button>
       </div>
