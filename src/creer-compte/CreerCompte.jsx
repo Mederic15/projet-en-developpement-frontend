@@ -1,22 +1,22 @@
-import React, { Component } from 'react';
+import React, { Component } from "react";
 
 class FormulaireCreationCompte extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      typeCompte: '', // Cette variable d'état stockera la valeur sélectionnée (étudiant ou compagnie)
-      nom: '',
-      prenom: '',
-      adresse: '',
-      numeroTelephone: '',
-      nomCompagnie: '',
-      adresseCompagnie: '',
-      prenomGerant: '',
-      nomGerant: '',
-      numeroTelephoneCompagnie: '',
-      posteGerant: '',
-      courriel: '', // Champ courriel
-      motDePasse: '', // Champ mot de passe
+      typeCompte: "", // Cette variable d'état stockera la valeur sélectionnée (étudiant ou compagnie)
+      nom: "",
+      prenom: "",
+      adresse: "",
+      numeroTelephone: "",
+      nomCompagnie: "",
+      adresseCompagnie: "",
+      prenomGerant: "",
+      nomGerant: "",
+      numeroTelephoneCompagnie: "",
+      posteGerant: "",
+      courriel: "", // Champ courriel
+      motDePasse: "", // Champ mot de passe
     };
   }
 
@@ -30,28 +30,73 @@ class FormulaireCreationCompte extends Component {
 
   handleSubmit = (e) => {
     e.preventDefault();
-    // Vous pouvez maintenant utiliser this.state pour obtenir les données du formulaire
-    console.log('Type de compte sélectionné :', this.state.typeCompte);
-    console.log('Nom :', this.state.nom);
-    console.log('Prénom :', this.state.prenom);
-    console.log('Adresse :', this.state.adresse);
-    console.log('Numéro de téléphone :', this.state.numeroTelephone);
 
     // Si le type de compte est "compagnie"
-    if (this.state.typeCompte === 'compagnie') {
-      console.log('Nom de la compagnie :', this.state.nomCompagnie);
-      console.log('Adresse de la compagnie :', this.state.adresseCompagnie);
-      console.log('Prénom du gérant :', this.state.prenomGerant);
-      console.log('Nom du gérant :', this.state.nomGerant);
-      console.log('Numéro de téléphone de la compagnie :', this.state.numeroTelephoneCompagnie);
-      console.log('Poste du gérant :', this.state.posteGerant);
+    if (this.state.typeCompte === "compagnie") {
+      console.log("Nom de la compagnie :", this.state.nomCompagnie);
+      console.log("Adresse de la compagnie :", this.state.adresseCompagnie);
+      console.log("Prénom du gérant :", this.state.prenomGerant);
+      console.log("Nom du gérant :", this.state.nomGerant);
+      console.log(
+        "Numéro de téléphone de la compagnie :",
+        this.state.numeroTelephoneCompagnie
+      );
+      console.log("Poste du gérant :", this.state.posteGerant);
+      const compagnieInfo = {
+        companyName: this.state.nomCompagnie,
+        address: this.state.adresseCompagnie,
+        managerFirstName: this.state.prenomGerant,
+        managerLastName: this.state.nomGerant,
+        phoneNumber: this.state.numeroTelephoneCompagnie,
+        phoneBooth: this.state.posteGerant,
+        email: this.state.courriel,
+        password: this.state.motDePasse,
+      };
+
+      fetch(
+        "https://development-project-0105-api-zdnf.onrender.com/users/employers",
+        {
+          method: "POST",
+          body: JSON.stringify(compagnieInfo),
+          headers: {
+            "Content-type": "application/json; charset=UTF-8",
+          },
+        }
+      )
+        .then((response) => response.json())
+        .then((json) => console.log(json));
+    } else {
+      console.log("Type de compte sélectionné :", this.state.typeCompte);
+      console.log("Nom :", this.state.nom);
+      console.log("Prénom :", this.state.prenom);
+      console.log("Adresse :", this.state.adresse);
+      console.log("Numéro de téléphone :", this.state.numeroTelephone);
+      const etudiantInfo = {
+        firstName: this.state.nom,
+        lastName: this.state.prenom,
+        address: this.state.adresse,
+        phoneNumber: this.state.numeroTelephone,
+        email: this.state.courriel,
+        password: this.state.motDePasse,
+      };
+
+      fetch(
+        "https://development-project-0105-api-zdnf.onrender.com/users/students",
+        {
+          method: "POST",
+          body: JSON.stringify(etudiantInfo),
+          headers: {
+            "Content-type": "application/json; charset=UTF-8",
+          },
+        }
+      )
+        .then((response) => response.json())
+        .then((json) => console.log(json));
     }
 
     // Champ courriel et mot de passe
-    console.log('Courriel :', this.state.courriel);
-    console.log('Mot de passe :', this.state.motDePasse);
-
-    // Ajoutez ici la logique pour créer le compte en fonction des données saisies
+    console.log("Courriel :", this.state.courriel);
+    console.log("Mot de passe :", this.state.motDePasse);
   };
 
   render() {
@@ -65,7 +110,7 @@ class FormulaireCreationCompte extends Component {
                 type="radio"
                 name="typeCompte"
                 value="etudiant"
-                checked={this.state.typeCompte === 'etudiant'}
+                checked={this.state.typeCompte === "etudiant"}
                 onChange={this.handleTypeCompteChange}
               />
               Étudiant
@@ -77,14 +122,14 @@ class FormulaireCreationCompte extends Component {
                 type="radio"
                 name="typeCompte"
                 value="compagnie"
-                checked={this.state.typeCompte === 'compagnie'}
+                checked={this.state.typeCompte === "compagnie"}
                 onChange={this.handleTypeCompteChange}
               />
               Compagnie
             </label>
           </div>
 
-          {this.state.typeCompte === 'etudiant' && (
+          {this.state.typeCompte === "etudiant" && (
             <div>
               <label>
                 Nom :
@@ -98,7 +143,7 @@ class FormulaireCreationCompte extends Component {
             </div>
           )}
 
-          {this.state.typeCompte === 'etudiant' && (
+          {this.state.typeCompte === "etudiant" && (
             <div>
               <label>
                 Prénom :
@@ -112,7 +157,7 @@ class FormulaireCreationCompte extends Component {
             </div>
           )}
 
-          {this.state.typeCompte === 'etudiant' && (
+          {this.state.typeCompte === "etudiant" && (
             <div>
               <label>
                 Adresse :
@@ -126,7 +171,7 @@ class FormulaireCreationCompte extends Component {
             </div>
           )}
 
-          {this.state.typeCompte === 'etudiant' && (
+          {this.state.typeCompte === "etudiant" && (
             <div>
               <label>
                 Numéro de téléphone :
@@ -140,7 +185,7 @@ class FormulaireCreationCompte extends Component {
             </div>
           )}
 
-          {this.state.typeCompte === 'compagnie' && (
+          {this.state.typeCompte === "compagnie" && (
             <div>
               <label>
                 Nom de la compagnie :
@@ -154,7 +199,7 @@ class FormulaireCreationCompte extends Component {
             </div>
           )}
 
-          {this.state.typeCompte === 'compagnie' && (
+          {this.state.typeCompte === "compagnie" && (
             <div>
               <label>
                 Adresse de la compagnie :
@@ -168,7 +213,7 @@ class FormulaireCreationCompte extends Component {
             </div>
           )}
 
-          {this.state.typeCompte === 'compagnie' && (
+          {this.state.typeCompte === "compagnie" && (
             <div>
               <label>
                 Prénom du gérant :
@@ -182,7 +227,7 @@ class FormulaireCreationCompte extends Component {
             </div>
           )}
 
-          {this.state.typeCompte === 'compagnie' && (
+          {this.state.typeCompte === "compagnie" && (
             <div>
               <label>
                 Nom du gérant :
@@ -196,7 +241,7 @@ class FormulaireCreationCompte extends Component {
             </div>
           )}
 
-          {this.state.typeCompte === 'compagnie' && (
+          {this.state.typeCompte === "compagnie" && (
             <div>
               <label>
                 Numéro de téléphone de la compagnie :
@@ -210,7 +255,7 @@ class FormulaireCreationCompte extends Component {
             </div>
           )}
 
-          {this.state.typeCompte === 'compagnie' && (
+          {this.state.typeCompte === "compagnie" && (
             <div>
               <label>
                 Poste du gérant :
