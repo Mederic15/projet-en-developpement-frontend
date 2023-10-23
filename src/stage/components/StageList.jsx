@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-
 import Card from "../../shared/components/UIElements/Card";
 import StageItem from "./StageItem";
 import Button from "../../shared/components/FormElements/Button";
@@ -9,21 +8,24 @@ const StageList = (props) => {
   const [stages, setStages] = useState([]);
   let filteredStages = props.stages;
 
+  const fetchStages = async () => {
+    try {
+      const response = await fetch("https://development-project-0105-api-zdnf.onrender.com/internships/");
+      const data = await response.json();
+      setStages(data.internships);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   useEffect(() => {
-    fetch("https://development-project-0105-api-zdnf.onrender.com/internships/")
-      .then((response) => response.json())
-      .then((data) => {
-        setStages(data.internships);
-      })
-      .catch((error) => console.error(error));
+    fetchStages();
   }, []);
 
   filteredStages =
     props.selectedStageType === "Tous"
       ? stages
       : stages.filter((stage) => stage.type === props.selectedStageType);
-
-  console.log(stages);
 
   if (stages.length === 0) {
     return (
@@ -57,11 +59,14 @@ const StageList = (props) => {
                 {
                   method: "DELETE",
                 }
-              );
+              ).then(() => {
+                fetchStages(); // Rafraîchir la liste des stages après suppression
+              });
             } catch (err) {
               console.log(err);
             }
           }}
+
           onClickModifyFunction={() => {
             let titreStage = prompt("Nouveau titre de stage"),
               descriptionStage = prompt("Nouvelle description"),
@@ -92,7 +97,6 @@ const StageList = (props) => {
                 alert("le stage a bien été modifié");
               })
               .then((json) => console.log(json));
-
           }}
         />
       ))}

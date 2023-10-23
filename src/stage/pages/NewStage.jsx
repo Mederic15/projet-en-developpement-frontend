@@ -5,7 +5,13 @@ import Input from "../../shared/components/FormElements/Input";
 import Button from "../../shared/components/FormElements/Button";
 import Select from "../../shared/components/FormElements/Select";
 import ErrorModal from "../../shared/components/UIElements/ErrorModal";
-import { VALIDATOR_REQUIRE } from "../../shared/util/validators";
+import {
+  VALIDATOR_REQUIRE,
+  VALIDATOR_MINLENGTH,
+  VALIDATOR_EMAIL,
+  VALIDATOR_PHONE,
+  VALIDATOR_NUMBER,
+} from "../../shared/util/validators";
 import { useForm } from "../../shared/hooks/form-hook";
 import { useHttpClient } from "../../shared/hooks/http-hook";
 import { AuthContext } from "../../shared/context/auth-context";
@@ -17,6 +23,8 @@ const NewStage = () => {
   const [isFormVisible, setFormVisible] = useState(false);
   const [stages, setStages] = useState([]);
   const [selectedStageType, setSelectedStageType] = useState("Tous");
+  const history = useNavigate();
+
   const handleStageTypeChange = (id, value, isValid) => {
     if (isValid) {
       setSelectedStageType(value);
@@ -26,22 +34,18 @@ const NewStage = () => {
   };
 
   useEffect(() => {
-    fetch("https://development-project-0105-api-zdnf.onrender.com/internships/")
-      .then((response) => response.json())
-      .then((data) => {
+    fetch('https://development-project-0105-api-zdnf.onrender.com/internships/')
+      .then(response => response.json())
+      .then(data => {
         setStages(data.internships);
       })
-      .catch((error) => console.error(error));
+      .catch(error => console.error(error));
   }, []);
-
-  const filteredStages =
-    selectedStageType === "Tous"
-      ? stages
-      : stages.filter((stage) => stage.type === selectedStageType);
 
   const toggleFormVisibility = () => {
     setFormVisible((prevIsFormVisible) => !prevIsFormVisible);
   };
+
   const [formState, inputHandler] = useForm(
     {
       title: {
@@ -72,7 +76,21 @@ const NewStage = () => {
     false
   );
 
-  const history = useNavigate();
+  const checkFormValidity = () => {
+    for (const inputName in formState.inputs) {
+      if (!formState.inputs[inputName].isValid) {
+        setIsFormValid(false);
+        return;
+      }
+    }
+    setIsFormValid(true);
+  };
+
+  useEffect(() => {
+    checkFormValidity();
+  }, [formState]);
+
+  const [isFormValid, setIsFormValid] = useState(false);
 
   const stageSubmitHandler = async (event) => {
     event.preventDefault();
@@ -85,14 +103,12 @@ const NewStage = () => {
       address: formState.inputs.address.value,
       startingDate: formState.inputs.startingDate.value,
       endingDate: formState.inputs.endingDate.value,
-      employerId: "6511ef9299867bb2d4bc921d",
+      employerId: "6511ef9299867bb2d4bc921d"
     });
 
-    console.log(dataToSend);
-
     try {
-      const reponseData = await sendRequest(
-        "https://development-project-0105-api-zdnf.onrender.com/internships/",
+      await sendRequest(
+        'https://development-project-0105-api-zdnf.onrender.com/internships/',
         "POST",
         dataToSend,
         {
@@ -100,8 +116,9 @@ const NewStage = () => {
         }
       );
 
-      console.log(reponseData);
-      history.push("/");
+      // Rafraîchir la page actuelle
+      window.location.reload();
+
     } catch (err) {
       console.log(err);
     }
@@ -131,7 +148,7 @@ const NewStage = () => {
             type="text"
             label="Description"
             validators={[VALIDATOR_REQUIRE()]}
-            errorText="Entrez une description valide."
+            errorText="Entrez un courriel valide."
             onInput={inputHandler}
           />
           <Input
@@ -140,7 +157,7 @@ const NewStage = () => {
             type="text"
             label="Salaire"
             validators={[VALIDATOR_REQUIRE()]}
-            errorText="Entrez un salaire valide."
+            errorText="Entrez un numéro de téléphone valide."
             onInput={inputHandler}
           />
           <Input
@@ -149,7 +166,7 @@ const NewStage = () => {
             type="text"
             label="Adresse de l'entreprise"
             validators={[VALIDATOR_REQUIRE()]}
-            errorText="Entrez une adresse valide."
+            errorText="Entrez un nom valide."
             onInput={inputHandler}
           />
           <Input
@@ -158,7 +175,7 @@ const NewStage = () => {
             type="date"
             label="Date de début"
             validators={[VALIDATOR_REQUIRE()]}
-            errorText="Entrez une date valide."
+            errorText="Entrez une adresse valide."
             onInput={inputHandler}
           />
           <Input
@@ -170,7 +187,9 @@ const NewStage = () => {
             errorText="Entrez une date valide."
             onInput={inputHandler}
           />
-          <Button type="submit">Ajouter stage</Button>
+          {isFormValid && (
+            <Button type="submit">Ajouter stage</Button>
+          )}
         </form>
       )}
       <StageList selectedStageType={selectedStageType} />
