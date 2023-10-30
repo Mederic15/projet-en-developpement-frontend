@@ -12,16 +12,32 @@ const StageItem = props => {
     endingDate: props.endingDate,
   });
 
+  const areFieldsValid = (values) => {
+    return (
+      values.title.trim() !== '' &&
+      values.description.trim() !== '' &&
+      values.salary.trim() !== '' &&
+      values.address.trim() !== '' &&
+      values.startingDate.trim() !== '' &&
+      values.endingDate.trim() !== ''
+    );
+  };
+
   const handleModifyClick = () => {
     setIsEditing(true);
   };
 
   const handleSaveClick = () => {
-    // Envoyez les valeurs modifiées à votre fonction onSaveFunction
-    props.onSaveFunction(modifiedValues);
+    // Vérifiez que tous les champs obligatoires sont remplis avant d'enregistrer
+    if (areFieldsValid(modifiedValues)) {
+      // Envoyez les valeurs modifiées à votre fonction onSaveFunction
+      props.onSaveFunction(modifiedValues);
 
-    // Arrêtez l'édition
-    setIsEditing(false);
+      // Arrêtez l'édition
+      setIsEditing(false);
+    } else {
+      alert('Veuillez remplir tous les champs obligatoires.');
+    }
   };
 
   const handleCancelClick = () => {

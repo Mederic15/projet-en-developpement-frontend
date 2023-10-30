@@ -28,7 +28,7 @@ const NavLinks = (props) => {
       ) : (
         <>
           <li>
-            <NavLink to="/creer-compte">Créer un comptet</NavLink>
+            <NavLink to="/creer-compte">Créer un compte</NavLink>
           </li>
           <li>
             <NavLink to="/connexion">Se connecter</NavLink>
