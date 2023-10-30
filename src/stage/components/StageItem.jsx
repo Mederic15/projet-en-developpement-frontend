@@ -89,6 +89,12 @@ const StageItem = (props) => {
     const { name, value } = event.target;
     setModifiedValues({ ...modifiedValues, [name]: value });
   };
+  
+  function formatDate(dateString) {
+    const date = new Date(dateString);
+    // Utilisez toISOString() pour formater la date au format ISO 8601 (AAAA-MM-JJ)
+    return date.toISOString().split("T")[0];
+  }
 
   return (
     <div className="stage-item__actions">
@@ -103,14 +109,15 @@ const StageItem = (props) => {
         </React.Fragment>
       ) : (
         <React.Fragment>
-          <h1>{props.title}</h1>
+          <h1><u>{props.title}</u></h1>
+          <br />
           <h2>{props.description}</h2>
-          <h2>{props.salary}$</h2>
-          <h2>{props.address}</h2>
-          <h2>{props.startingDate}</h2>
-          <h2>{props.endingDate}</h2>
-          <Button onClick={props.onClickDeleteFunction}>Supprimer</Button>
-          <Button onClick={handleModifyClick}>Modifier</Button>
+          <h2>Salaire: {props.salary}$</h2>
+          <h2>Adresse: {props.address}</h2>
+          <h2>Date du Debut: {formatDate(props.startingDate)}</h2>
+          <h2>Date de Fin: {formatDate(props.endingDate)}</h2>
+          <button onClick={props.onClickDeleteFunction}>Supprimer</button>
+          <button onClick={handleModifyClick}>Modifier</button>
         </React.Fragment>
       )}
       {isEditing && (
