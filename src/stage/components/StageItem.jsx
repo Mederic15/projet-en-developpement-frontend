@@ -104,8 +104,8 @@ const StageItem = (props) => {
           <h2>{props.description}</h2>
           <h2>{props.salary}$</h2>
           <h2>{props.address}</h2>
-          <h2>{props.startingDate}</h2>
-          <h2>{props.endingDate}</h2>
+          <h2>{formatDate(props.startingDate)}</h2>
+          <h2>{formatDate(props.endingDate)}</h2>
         </React.Fragment>
       ) : (
         <React.Fragment>
@@ -167,17 +167,17 @@ const StageItem = (props) => {
             element="input"
             type="date"
             label="Date de début"
-            value={modifiedValues.startingDate} // Set the value to display current value
+            value={formatDate(modifiedValues.startingDate)} // Set the value to display current value
             validators={[VALIDATOR_REQUIRE()]}
             errorText="Entrez une adresse valide."
-            onInput={inputHandler}
+            onInput={inputHandler}s
           />
           <Input
             id="endingDate"
             element="input"
             type="date"
             label="Date de fin"
-            value={modifiedValues.endingDate} // Set the value to display current value
+            value={formatDate(modifiedValues.endingDate)} // Set the value to display current value
             validators={[VALIDATOR_REQUIRE()]}
             errorText="Entrez une date valide."
             onInput={inputHandler}
