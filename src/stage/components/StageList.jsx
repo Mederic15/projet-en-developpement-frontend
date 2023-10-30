@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
 import Card from "../../shared/components/UIElements/Card";
 import StageItem from "./StageItem";
-import Button from "../../shared/components/FormElements/Button"; // Assurez-vous que le chemin vers le composant Button est correct
+import Button from "../../shared/components/FormElements/Button";
 import "./StageList.css";
 
 const StageList = (props) => {
   const [stages, setStages] = useState([]);
-  let filteredStages = props.stages; // Vous n'utilisez pas encore props.stages ici
+  let filteredStages = props.stages;
 
   const fetchStages = async () => {
     try {
@@ -21,6 +21,27 @@ const StageList = (props) => {
   useEffect(() => {
     fetchStages();
   }, []);
+
+  const handleSaveStage = (stageId, updatedStageData) => {
+    fetch(
+      "https://development-project-0105-api-zdnf.onrender.com/internships/" + stageId,
+      {
+        method: "PATCH",
+        body: JSON.stringify(updatedStageData),
+        headers: {
+          "Content-type": "application/json; charset=UTF-8",
+        },
+      }
+    )
+      .then((response) => {
+        console.log(response);
+        alert("Le stage a bien été modifié");
+        fetchStages();
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
 
   filteredStages =
     props.selectedStageType === "Tous"
@@ -60,43 +81,14 @@ const StageList = (props) => {
                   method: "DELETE",
                 }
               ).then(() => {
-                fetchStages(); // Rafraîchir la liste des stages après suppression
+                fetchStages();
               });
             } catch (err) {
               console.log(err);
             }
           }}
-
-          onClickModifyFunction={() => {
-            let titreStage = prompt("Nouveau titre de stage"),
-              descriptionStage = prompt("Nouvelle description"),
-              salaire = prompt("Nouveau salaire"),
-              adresse = prompt("Nouvelle adresse"),
-              dateDebut = prompt("Nouvelle date de début (AAAA/MM/JJ)"),
-              dateFin = prompt("Nouvelle date de fin (AAAA/MM/JJ)");
-
-            fetch(
-              "https://development-project-0105-api-zdnf.onrender.com/internships/" + stage.id,
-              {
-                method: "PATCH",
-                body: JSON.stringify({
-                  title: titreStage,
-                  description: descriptionStage,
-                  address: adresse,
-                  salary: salaire,
-                  startingDate: dateDebut,
-                  endingDate: dateFin
-                }),
-                headers: {
-                  "Content-type": "application/json; charset=UTF-8",
-                },
-              }
-            )
-              .then((response) => {
-                console.log(response);
-                alert("le stage a bien été modifié");
-              })
-              .then((json) => console.log(json));
+          onSaveFunction={(updatedStageData) => {
+            handleSaveStage(stage.id, updatedStageData);
           }}
         />
       ))}
