@@ -116,8 +116,8 @@ const StageItem = (props) => {
           <h2>Adresse: {props.address}</h2>
           <h2>Date du Debut: {formatDate(props.startingDate)}</h2>
           <h2>Date de Fin: {formatDate(props.endingDate)}</h2>
-          <button onClick={props.onClickDeleteFunction}>Supprimer</button>
-          <button onClick={handleModifyClick}>Modifier</button>
+          <Button onClick={props.onClickDeleteFunction}>Supprimer</Button>
+          <Button onClick={handleModifyClick}>Modifier</Button>
         </React.Fragment>
       )}
       {isEditing && (

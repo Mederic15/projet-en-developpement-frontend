@@ -116,8 +116,7 @@ const NewStage = () => {
         }
       );
 
-      // Rafraîchir la page actuelle
-      window.location.reload();
+      
 
     } catch (err) {
       console.log(err);
