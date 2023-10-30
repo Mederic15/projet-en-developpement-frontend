@@ -1,6 +1,6 @@
 function PageAccueil(props) {
   return (
-    <div className="card text-center mx-auto" style={{ width: "50rem" }}>
+    <div className="card text-center mx-auto">
       <h1>
         {props.utilisateur.message !== "student object" &&
         props.utilisateur.message !== "employer object"
