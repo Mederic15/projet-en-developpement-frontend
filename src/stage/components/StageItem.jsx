@@ -116,8 +116,9 @@ const StageItem = (props) => {
           <h2>Adresse: {props.address}</h2>
           <h2>Date du Debut: {formatDate(props.startingDate)}</h2>
           <h2>Date de Fin: {formatDate(props.endingDate)}</h2>
+          {(props.isStudent) ? <></> : <>
           <Button onClick={props.onClickDeleteFunction}>Supprimer</Button>
-          <Button onClick={handleModifyClick}>Modifier</Button>
+          <Button onClick={handleModifyClick}>Modifier</Button></>}
         </React.Fragment>
       )}
       {isEditing && (
@@ -183,9 +184,10 @@ const StageItem = (props) => {
             onInput={inputHandler}
           />
           <div className="button-row">
-            <Button onClick={handleSaveClick}>Enregistrer</Button>
+            {(props.isStudent) ? <></> : <><Button onClick={handleInputChange}>Enregistrer</Button>
             <Button onClick={handleCancelClick}>Annuler</Button>
-            <Button onClick={props.onClickDeleteFunction}>Supprimer</Button>
+            <Button onClick={props.onClickDeleteFunction}>Supprimer</Button></>}
+            
           </div>
         </React.Fragment>
       )}
