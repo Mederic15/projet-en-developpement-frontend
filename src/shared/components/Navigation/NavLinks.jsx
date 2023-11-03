@@ -19,7 +19,7 @@ const NavLinks = (props) => {
         <>
           {props.utilisateur.message === "student object"
             ? props.utilisateur.student.lastName + " est connecté (étudiant)"
-            : props.utilisateur.employer.lastName + " est connecté (employeur)"}
+            : props.utilisateur.employer.managerLastName + " est connecté (employeur)"}
           <li>
             <NavLink to="stage">Stage</NavLink>
           </li>

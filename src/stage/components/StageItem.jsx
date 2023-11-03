@@ -88,11 +88,26 @@ const StageItem = props => {
           <h2>{props.description}</h2>
           <h2>{props.salary}$</h2>
           <h2>{props.address}</h2>
-          <h2>{props.startingDate}</h2>
-          <h2>{props.endingDate}</h2>
-          
-          
-          <input
+          <h2>{formatDate(props.startingDate)}</h2>
+          <h2>{formatDate(props.endingDate)}</h2>
+        </React.Fragment>
+      ) : (
+        <React.Fragment>
+          <h1><u>{props.title}</u></h1>
+          <br />
+          <h2>{props.description}</h2>
+          <h2>Salaire: {props.salary}$</h2>
+          <h2>Adresse: {props.address}</h2>
+          <h2>Date du Debut: {formatDate(props.startingDate)}</h2>
+          <h2>Date de Fin: {formatDate(props.endingDate)}</h2>
+          {(props.isStudent) ? <></> : <>
+          <Button onClick={props.onClickDeleteFunction}>Supprimer</Button>
+          <Button onClick={handleModifyClick}>Modifier</Button></>}
+        </React.Fragment>
+      )}
+      {isEditing && (
+        <React.Fragment>
+          <Input
             id="title"
             element="input"
             type="text"
@@ -159,9 +174,10 @@ const StageItem = props => {
             onInput={inputHandler}
           />
           <div className="button-row">
-            <Button onClick={handleSaveClick}>Enregistrer</Button>
+            {(props.isStudent) ? <></> : <><Button onClick={handleInputChange}>Enregistrer</Button>
             <Button onClick={handleCancelClick}>Annuler</Button>
-            <Button onClick={props.onClickDeleteFunction}>Supprimer</Button>
+            <Button onClick={props.onClickDeleteFunction}>Supprimer</Button></>}
+            
           </div>
         </React.Fragment>
       ) : (

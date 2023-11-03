@@ -10,9 +10,18 @@ const StageList = (props) => {
 
   const fetchStages = async () => {
     try {
-      const response = await fetch("https://development-project-0105-api-zdnf.onrender.com/internships/");
+      const response = await fetch(
+        "https://development-project-0105-api-zdnf.onrender.com/internships/"
+      );
       const data = await response.json();
-      setStages(data.internships);
+
+      let internships = data.internships;
+      if (props.utilisateur.message === "employer object") {
+        internships = internships.filter((internship) => {
+          return internship.employerId === props.utilisateur.employer.id;
+        });
+      }
+      setStages(internships);
     } catch (error) {
       console.error(error);
     }
@@ -71,6 +80,7 @@ const StageList = (props) => {
           address={stage.address}
           startingDate={stage.startingDate}
           endingDate={stage.endingDate}
+          isStudent={props.utilisateur.message === "student object"}
           onClickDeleteFunction={() => {
             try {
               console.log("stage.id" + stage.id);

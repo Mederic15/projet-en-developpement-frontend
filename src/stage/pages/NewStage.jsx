@@ -17,11 +17,13 @@ import { useHttpClient } from "../../shared/hooks/http-hook";
 import { AuthContext } from "../../shared/context/auth-context";
 import "./StageForm.css";
 
-const NewStage = () => {
+const NewStage = (props) => {
   const auth = useContext(AuthContext);
   const { error, sendRequest, clearError } = useHttpClient();
   const [isFormVisible, setFormVisible] = useState(false);
+  const [utilisateur, setUtilisateur] = useState(props.utilisateur);
   const [stages, setStages] = useState([]);
+
   const [selectedStageType, setSelectedStageType] = useState("Tous");
   const history = useNavigate();
 
@@ -103,7 +105,7 @@ const NewStage = () => {
       address: formState.inputs.address.value,
       startingDate: formState.inputs.startingDate.value,
       endingDate: formState.inputs.endingDate.value,
-      employerId: "6511ef9299867bb2d4bc921d"
+      employerId: utilisateur.employer.id
     });
 
     try {
@@ -115,9 +117,6 @@ const NewStage = () => {
           "Content-Type": "application/json",
         }
       );
-
-      
-
     } catch (err) {
       console.log(err);
     }
@@ -126,10 +125,11 @@ const NewStage = () => {
   return (
     <React.Fragment>
       <ErrorModal error={error} onClear={clearError} />
-      <Button onClick={toggleFormVisibility}>
+      {(utilisateur.message === "student object") ? <></>:<><Button onClick={toggleFormVisibility}>
         {isFormVisible ? "Masquer le formulaire" : "Afficher le formulaire"}
       </Button>
-
+</>}
+      
       {isFormVisible && (
         <form className="stage-form" onSubmit={stageSubmitHandler}>
           <Input
@@ -191,7 +191,7 @@ const NewStage = () => {
           )}
         </form>
       )}
-      <StageList selectedStageType={selectedStageType} />
+      <StageList selectedStageType={selectedStageType} utilisateur={utilisateur}/>
     </React.Fragment>
   );
 };

@@ -11,9 +11,9 @@ function PageAccueil(props) {
             " " +
             props.utilisateur.student.lastName
           : "Bienvenu, " +
-            props.utilisateur.employer.firstName +
+            props.utilisateur.employer.managerFirstName +
             " " +
-            props.utilisateur.employer.lastName}
+            props.utilisateur.employer.managerLastName}
       </h1>
       <img
         style={{ height: "150%" }}
