@@ -1,7 +1,8 @@
-import React, { useState } from "react";
-import Input from "../../shared/components/FormElements/Input";
+import React, { useState } from 'react';
 import Button from "../../shared/components/FormElements/Button";
+import Input from "../../shared/components/FormElements/Input";
 import { useForm } from "../../shared/hooks/form-hook";
+import './StageItem.css';
 import {
   VALIDATOR_REQUIRE,
   VALIDATOR_MINLENGTH,
@@ -9,9 +10,8 @@ import {
   VALIDATOR_PHONE,
   VALIDATOR_NUMBER,
 } from "../../shared/util/validators";
-import "./StageItem.css";
 
-const StageItem = (props) => {
+const StageItem = props => {
   const [isEditing, setIsEditing] = useState(false);
   const [modifiedValues, setModifiedValues] = useState({
     title: props.title,
@@ -21,6 +21,12 @@ const StageItem = (props) => {
     startingDate: props.startingDate,
     endingDate: props.endingDate,
   });
+
+  function formatDate(dateString) {
+    const date = new Date(dateString);
+    // Utilisez toISOString() pour formater la date au format ISO 8601 (AAAA-MM-JJ)
+    return date.toISOString().split("T")[0];
+  }
 
   const [formState, inputHandler] = useForm(
     {
@@ -52,32 +58,16 @@ const StageItem = (props) => {
     false
   );
 
-  const areFieldsValid = (values) => {
-    return (
-      values.title.trim() !== "" &&
-      values.description.trim() !== "" &&
-      values.salary.trim() !== "" &&
-      values.address.trim() !== "" &&
-      values.startingDate.trim() !== "" &&
-      values.endingDate.trim() !== ""
-    );
-  };
-
   const handleModifyClick = () => {
     setIsEditing(true);
   };
 
   const handleSaveClick = () => {
-    // Vérifiez que tous les champs obligatoires sont remplis avant d'enregistrer
-    if (areFieldsValid(modifiedValues)) {
-      // Envoyez les valeurs modifiées à votre fonction onSaveFunction
-      props.onSaveFunction(modifiedValues);
+    // Envoyez les valeurs modifiées à votre fonction onSaveFunction
+    props.onSaveFunction(modifiedValues);
 
-      // Arrêtez l'édition
-      setIsEditing(false);
-    } else {
-      alert("Veuillez remplir tous les champs obligatoires.");
-    }
+    // Arrêtez l'édition
+    setIsEditing(false);
   };
 
   const handleCancelClick = () => {
@@ -85,16 +75,10 @@ const StageItem = (props) => {
     setIsEditing(false);
   };
 
-  const handleInputChange = (event) => {
+  const handleInputChange = event => {
     const { name, value } = event.target;
     setModifiedValues({ ...modifiedValues, [name]: value });
   };
-  
-  function formatDate(dateString) {
-    const date = new Date(dateString);
-    // Utilisez toISOString() pour formater la date au format ISO 8601 (AAAA-MM-JJ)
-    return date.toISOString().split("T")[0];
-  }
 
   return (
     <div className="stage-item__actions">
@@ -104,82 +88,74 @@ const StageItem = (props) => {
           <h2>{props.description}</h2>
           <h2>{props.salary}$</h2>
           <h2>{props.address}</h2>
-          <h2>{formatDate(props.startingDate)}</h2>
-          <h2>{formatDate(props.endingDate)}</h2>
-        </React.Fragment>
-      ) : (
-        <React.Fragment>
-          <h1><u>{props.title}</u></h1>
-          <br />
-          <h2>{props.description}</h2>
-          <h2>Salaire: {props.salary}$</h2>
-          <h2>Adresse: {props.address}</h2>
-          <h2>Date du Debut: {formatDate(props.startingDate)}</h2>
-          <h2>Date de Fin: {formatDate(props.endingDate)}</h2>
-          <Button onClick={props.onClickDeleteFunction}>Supprimer</Button>
-          <Button onClick={handleModifyClick}>Modifier</Button>
-        </React.Fragment>
-      )}
-      {isEditing && (
-        <React.Fragment>
-          <Input
+          <h2>{props.startingDate}</h2>
+          <h2>{props.endingDate}</h2>
+          
+          
+          <input
             id="title"
             element="input"
             type="text"
             label="Titre du stage"
-            value={modifiedValues.title}
             validators={[VALIDATOR_REQUIRE()]}
-            errorText="Entrez un titre valide."
-            onInput={inputHandler} // Make sure inputHandler is defined
+            name="title"
+            value={modifiedValues.title}
+            onChange={handleInputChange}
+            onInput={inputHandler}
           />
-          <Input
+          <input
             id="description"
             element="input"
             type="text"
             label="Description"
-            value={modifiedValues.description} // Set the value to display current value
             validators={[VALIDATOR_REQUIRE()]}
-            errorText="Entrez un courriel valide."
+            name="description"
+            value={modifiedValues.description}
+            onChange={handleInputChange}
             onInput={inputHandler}
           />
-          <Input
+          <input
             id="salary"
             element="input"
             type="text"
             label="Salaire"
-            value={modifiedValues.salary} // Set the value to display current value
             validators={[VALIDATOR_REQUIRE()]}
-            errorText="Entrez un numéro de téléphone valide."
+            name="salary"
+            value={modifiedValues.salary}
+            onChange={handleInputChange}
             onInput={inputHandler}
           />
-          <Input
+          <input
             id="address"
             element="input"
             type="text"
             label="Adresse de l'entreprise"
-            value={modifiedValues.address} // Set the value to display current value
             validators={[VALIDATOR_REQUIRE()]}
-            errorText="Entrez un nom valide."
+            name="address"
+            value={modifiedValues.address}
+            onChange={handleInputChange}
             onInput={inputHandler}
           />
-          <Input
+          <input
             id="startingDate"
             element="input"
             type="date"
             label="Date de début"
-            value={formatDate(modifiedValues.startingDate)} // Set the value to display current value
             validators={[VALIDATOR_REQUIRE()]}
-            errorText="Entrez une adresse valide."
-            onInput={inputHandler}s
+            name="startingDate"
+            value={formatDate(modifiedValues.startingDate)}
+            onChange={handleInputChange}
+            onInput={inputHandler}
           />
-          <Input
+          <input
             id="endingDate"
             element="input"
             type="date"
             label="Date de fin"
-            value={formatDate(modifiedValues.endingDate)} // Set the value to display current value
             validators={[VALIDATOR_REQUIRE()]}
-            errorText="Entrez une date valide."
+            name="endingDate"
+            value={formatDate(modifiedValues.endingDate)}
+            onChange={handleInputChange}
             onInput={inputHandler}
           />
           <div className="button-row">
@@ -187,6 +163,17 @@ const StageItem = (props) => {
             <Button onClick={handleCancelClick}>Annuler</Button>
             <Button onClick={props.onClickDeleteFunction}>Supprimer</Button>
           </div>
+        </React.Fragment>
+      ) : (
+        <React.Fragment>
+          <h1>{props.title}</h1>
+          <h2>{props.description}</h2>
+          <h2>{props.salary}$</h2>
+          <h2>{props.address}</h2>
+          <h2>{formatDate(props.startingDate)}</h2>
+          <h2>{formatDate(props.endingDate)}</h2>
+          <Button onClick={props.onClickDeleteFunction}>Supprimer</Button>
+          <Button onClick={handleModifyClick}>Modifier</Button>
         </React.Fragment>
       )}
     </div>
