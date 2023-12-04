@@ -4,7 +4,7 @@ function PageAccueil(props) {
       <h1>
         {props.utilisateur.message !== "student object" &&
         props.utilisateur.message !== "employer object"
-          ? "Veillez vous connectez"
+          ? "Veuillez vous connectez"
           : props.utilisateur.message === "student object"
           ? "Bienvenu, " +
             props.utilisateur.student.firstName +
