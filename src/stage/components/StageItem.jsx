@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import Button from "../../shared/components/FormElements/Button";
 import Input from "../../shared/components/FormElements/Input";
 import { useForm } from "../../shared/hooks/form-hook";
+import { useHttpClient } from "../../shared/hooks/http-hook";
+
 import "./StageItem.css";
 import {
   VALIDATOR_REQUIRE,
@@ -12,6 +14,8 @@ import {
 } from "../../shared/util/validators";
 
 const StageItem = (props) => {
+  const { sendRequest } = useHttpClient();
+
   const [isEditing, setIsEditing] = useState(false);
   const [modifiedValues, setModifiedValues] = useState({
     title: props.title,
@@ -21,6 +25,37 @@ const StageItem = (props) => {
     startingDate: props.startingDate,
     endingDate: props.endingDate,
   });
+
+  const [studentHasApplied, setStudentHasApplied] = useState(
+    hasStudentAppliedToInternship(props.studentId, props.students)
+  );
+
+  async function makeStudentApplyToInternship(internshipId, studentId) {
+    const dataToSend = JSON.stringify({});
+
+    await sendRequest(
+      "https://development-project-0105-api-zdnf.onrender.com/internships/" +
+        internshipId +
+        "/" +
+        studentId,
+      "PATCH",
+      dataToSend,
+      {
+        "Content-Type": "application/json",
+      }
+    );
+  }
+
+  function hasStudentAppliedToInternship(studentId, students) {
+    let studentHasApplied = false;
+    students.forEach((student) => {
+      console.log("student", student);
+      if (student.student._id === studentId) {
+        studentHasApplied = true;
+      }
+    });
+    return studentHasApplied;
+  }
 
   function formatDate(dateString) {
     const date = new Date(dateString);
@@ -81,9 +116,14 @@ const StageItem = (props) => {
   };
 
   const handleApplyClick = () => {
-    // La fonction à exécuter lorsqu'un étudiant postule
-    // Vous devez implémenter cette fonction selon votre logique métier.
-    // Peut-être vous ouvrez un formulaire de candidature, etc.
+    makeStudentApplyToInternship(props.id, props.studentId);
+    console.log(
+      "    makeStudentApplyToInternship(props.id, props.studentId);",
+      props.id,
+      props.studentId
+    );
+    setStudentHasApplied(true);
+    alert("Votre candidature a bien été envoyée! ")
   };
 
   return (
@@ -96,7 +136,9 @@ const StageItem = (props) => {
           <h2>{props.address}</h2>
           <h2>{formatDate(props.startingDate)}</h2>
           <h2>{formatDate(props.endingDate)}</h2>
-          <h2>Gérant: {props.managerName}</h2>
+          <h2>
+            Gérant: {props.managerName}
+          </h2>
           <h2>Courriel du gérant: {props.managerEmail}</h2>
 
           <label htmlFor="title">Titre du stage</label>
@@ -171,7 +213,7 @@ const StageItem = (props) => {
             onInput={inputHandler}
           />
           <div className="button-row">
-          {props.isStudent ? (
+            {props.isStudent ? (
               <Button onClick={handleApplyClick}>Postuler</Button>
             ) : (
               <>
@@ -190,13 +232,54 @@ const StageItem = (props) => {
           <h2>{props.address}</h2>
           <h2>{formatDate(props.startingDate)}</h2>
           <h2>{formatDate(props.endingDate)}</h2>
-          <h2>Gérant: {props.managerName}</h2>
+          <h2>
+            Gérant: {props.managerName}
+          </h2>
           <h2>Courriel du gérant: {props.managerEmail}</h2>
           <div className="button-row">
-          {props.isStudent ? (
-              <Button onClick={handleApplyClick}>Postuler</Button>
+            {props.isStudent ? (
+              studentHasApplied ? (
+                <Button onClick={handleApplyClick} disabled>
+                  Postuler
+                </Button>
+              ) : (
+                <Button onClick={handleApplyClick}>Postuler</Button>
+              )
             ) : (
               <>
+                <h3>Stagiaires:</h3>
+                <hr></hr>
+                {props.students.map((student) => {
+                  console.log("student", student);
+                  if (
+                    hasStudentAppliedToInternship(
+                      student.student._id,
+                      props.students
+                    )
+                  ) {
+                    return (
+                      <>
+                        <h3>
+                          {"Nom complet: " +
+                            student.student.firstName +
+                            " " +
+                            student.student.lastName}
+                        </h3>
+                        <h3>{"Email: " + student.student.email}</h3>
+                        <h3>
+                          {"Numéro de téléphone: " +
+                            student.student.phoneNumber}
+                        </h3>
+                        <h3>
+                          {"Date d'application: " + student.applicationDate}
+                        </h3>
+                        <hr></hr>
+                      </>
+                    );
+                  } else {
+                    return <></>;
+                  }
+                })}
                 <Button onClick={props.onClickDeleteFunction}>
                   Supprimer{" "}
                 </Button>

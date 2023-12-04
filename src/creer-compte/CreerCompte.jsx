@@ -94,7 +94,9 @@ class FormulaireCreationCompte extends Component {
         }
       )
         .then((response) => response.json())
-        .then((json) => console.log(json));
+        .then((json) => {
+          alert("Le compte a bien été créé!");
+        });
     }
 
     // Champ courriel et mot de passe

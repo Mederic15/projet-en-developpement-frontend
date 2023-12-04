@@ -38,12 +38,12 @@ const NewStage = (props) => {
   };
 
   useEffect(() => {
-    fetch('https://development-project-0105-api-zdnf.onrender.com/internships/')
-      .then(response => response.json())
-      .then(data => {
+    fetch("https://development-project-0105-api-zdnf.onrender.com/internships/")
+      .then((response) => response.json())
+      .then((data) => {
         setStages(data.internships);
       })
-      .catch(error => console.error(error));
+      .catch((error) => console.error(error));
   }, []);
 
   const toggleFormVisibility = () => {
@@ -116,13 +116,16 @@ const NewStage = (props) => {
       startingDate: formState.inputs.startingDate.value,
       endingDate: formState.inputs.endingDate.value,
       employerId: utilisateur.employer.id,
-      managerName: managerName, // Ajoutez le nom du gérant
-      managerEmail: managerEmail, // Ajoutez le courriel du gérant
+      managerName:
+        utilisateur.employer.managerFirstName +
+        " " +
+        utilisateur.employer.managerLastName, // Ajoutez le nom du gérant
+      managerEmail: utilisateur.employer.email,
     });
 
     try {
       await sendRequest(
-        'https://development-project-0105-api-zdnf.onrender.com/internships/',
+        "https://development-project-0105-api-zdnf.onrender.com/internships/",
         "POST",
         dataToSend,
         {
@@ -137,11 +140,16 @@ const NewStage = (props) => {
   return (
     <React.Fragment>
       <ErrorModal error={error} onClear={clearError} />
-      {(utilisateur.message === "student object") ? <></>:<><Button onClick={toggleFormVisibility}>
-        {isFormVisible ? "Masquer le formulaire" : "Afficher le formulaire"}
-      </Button>
-</>}
-      
+      {utilisateur.message === "student object" ? (
+        <></>
+      ) : (
+        <>
+          <Button onClick={toggleFormVisibility}>
+            {isFormVisible ? "Masquer le formulaire" : "Afficher le formulaire"}
+          </Button>
+        </>
+      )}
+
       {isFormVisible && (
         <form className="stage-form" onSubmit={stageSubmitHandler}>
           <Input
@@ -198,13 +206,14 @@ const NewStage = (props) => {
             errorText="Entrez une date valide."
             onInput={inputHandler}
           />
-          
-          {isFormValid && (
-            <Button type="submit">Ajouter stage</Button>
-          )}
+
+          {isFormValid && <Button type="submit">Ajouter stage</Button>}
         </form>
       )}
-      <StageList selectedStageType={selectedStageType} utilisateur={utilisateur}/>
+      <StageList
+        selectedStageType={selectedStageType}
+        utilisateur={utilisateur}
+      />
     </React.Fragment>
   );
 };

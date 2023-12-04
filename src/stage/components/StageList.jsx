@@ -33,7 +33,8 @@ const StageList = (props) => {
 
   const handleSaveStage = (stageId, updatedStageData) => {
     fetch(
-      "https://development-project-0105-api-zdnf.onrender.com/internships/" + stageId,
+      "https://development-project-0105-api-zdnf.onrender.com/internships/" +
+        stageId,
       {
         method: "PATCH",
         body: JSON.stringify(updatedStageData),
@@ -62,7 +63,6 @@ const StageList = (props) => {
       <div className="stage-list center">
         <Card>
           <h2>Aucun stage trouvé. Voulez-vous en créer un ?</h2>
-          <Button to="/stages/new">Créer un stage</Button>
         </Card>
       </div>
     );
@@ -80,7 +80,20 @@ const StageList = (props) => {
           address={stage.address}
           startingDate={stage.startingDate}
           endingDate={stage.endingDate}
+          students={stage.students}
+          employerId={stage.employerId}
+          managerName={
+            stage.managerName
+          }
+          managerEmail={
+            stage.managerEmail
+          }
           isStudent={props.utilisateur.message === "student object"}
+          studentId={
+            props.utilisateur.message === "student object"
+              ? props.utilisateur.student.id
+              : null
+          }
           onClickDeleteFunction={() => {
             try {
               console.log("stage.id" + stage.id);
