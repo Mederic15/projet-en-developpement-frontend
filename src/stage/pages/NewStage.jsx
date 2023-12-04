@@ -18,6 +18,8 @@ import { AuthContext } from "../../shared/context/auth-context";
 import "./StageForm.css";
 
 const NewStage = (props) => {
+  const [managerName, setManagerName] = useState("");
+  const [managerEmail, setManagerEmail] = useState("");
   const auth = useContext(AuthContext);
   const { error, sendRequest, clearError } = useHttpClient();
   const [isFormVisible, setFormVisible] = useState(false);
@@ -94,6 +96,14 @@ const NewStage = (props) => {
 
   const [isFormValid, setIsFormValid] = useState(false);
 
+  const handleManagerNameChange = (value, isValid) => {
+    setManagerName(value);
+  };
+
+  const handleManagerEmailChange = (value, isValid) => {
+    setManagerEmail(value);
+  };
+
   const stageSubmitHandler = async (event) => {
     event.preventDefault();
     setFormVisible(false);
@@ -105,7 +115,9 @@ const NewStage = (props) => {
       address: formState.inputs.address.value,
       startingDate: formState.inputs.startingDate.value,
       endingDate: formState.inputs.endingDate.value,
-      employerId: utilisateur.employer.id
+      employerId: utilisateur.employer.id,
+      managerName: managerName, // Ajoutez le nom du gérant
+      managerEmail: managerEmail, // Ajoutez le courriel du gérant
     });
 
     try {
@@ -186,6 +198,7 @@ const NewStage = (props) => {
             errorText="Entrez une date valide."
             onInput={inputHandler}
           />
+          
           {isFormValid && (
             <Button type="submit">Ajouter stage</Button>
           )}

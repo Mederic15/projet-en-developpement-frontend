@@ -80,6 +80,12 @@ const StageItem = (props) => {
     setModifiedValues({ ...modifiedValues, [name]: value });
   };
 
+  const handleApplyClick = () => {
+    // La fonction à exécuter lorsqu'un étudiant postule
+    // Vous devez implémenter cette fonction selon votre logique métier.
+    // Peut-être vous ouvrez un formulaire de candidature, etc.
+  };
+
   return (
     <div className="stage-item__actions">
       {isEditing ? (
@@ -90,6 +96,8 @@ const StageItem = (props) => {
           <h2>{props.address}</h2>
           <h2>{formatDate(props.startingDate)}</h2>
           <h2>{formatDate(props.endingDate)}</h2>
+          <h2>Gérant: {props.managerName}</h2>
+          <h2>Courriel du gérant: {props.managerEmail}</h2>
 
           <label htmlFor="title">Titre du stage</label>
           <input
@@ -163,8 +171,8 @@ const StageItem = (props) => {
             onInput={inputHandler}
           />
           <div className="button-row">
-            {props.isStudent ? (
-              <></>
+          {props.isStudent ? (
+              <Button onClick={handleApplyClick}>Postuler</Button>
             ) : (
               <>
                 <Button onClick={handleSaveClick}>Enregistrer</Button>
@@ -182,9 +190,11 @@ const StageItem = (props) => {
           <h2>{props.address}</h2>
           <h2>{formatDate(props.startingDate)}</h2>
           <h2>{formatDate(props.endingDate)}</h2>
+          <h2>Gérant: {props.managerName}</h2>
+          <h2>Courriel du gérant: {props.managerEmail}</h2>
           <div className="button-row">
-            {props.isStudent ? (
-              <></>
+          {props.isStudent ? (
+              <Button onClick={handleApplyClick}>Postuler</Button>
             ) : (
               <>
                 <Button onClick={props.onClickDeleteFunction}>
